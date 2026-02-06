@@ -19,6 +19,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, CheckCircle, XCircle, Clock, RotateCcw, FileText } from "lucide-react";
 import { toast } from "sonner";
+import { MarkdownPreview } from "@/components/markdown-preview";
 
 interface Feature {
   id: string;
@@ -239,9 +240,7 @@ export default function FeatureDetailPage({ params }: { params: Promise<{ id: st
                 </CardHeader>
                 <CardContent>
                   <ScrollArea className="h-[600px]">
-                    <pre className="text-sm whitespace-pre-wrap font-mono leading-relaxed">
-                      {document.content}
-                    </pre>
+                    <MarkdownPreview content={document.content} />
                   </ScrollArea>
                 </CardContent>
               </Card>
