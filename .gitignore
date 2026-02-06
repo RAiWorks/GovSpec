@@ -39,3 +39,7 @@ coverage/
 # Misc
 *.tmp
 *.bak
+
+# Private usage
+docs_private
+docs_private/
