@@ -2,11 +2,97 @@
 
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import type { Components } from "react-markdown";
+
+const components: Components = {
+  // Style code blocks with a lighter background and proper font
+  pre: ({ children }) => (
+    <pre className="bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg p-4 overflow-x-auto text-sm leading-relaxed my-4">
+      {children}
+    </pre>
+  ),
+  code: ({ children, className }) => {
+    // Inline code
+    if (!className) {
+      return (
+        <code className="bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 px-1.5 py-0.5 rounded text-sm font-mono">
+          {children}
+        </code>
+      );
+    }
+    // Code inside pre blocks
+    return (
+      <code className="text-zinc-800 dark:text-zinc-200 font-mono text-sm whitespace-pre">
+        {children}
+      </code>
+    );
+  },
+  // Better table styling
+  table: ({ children }) => (
+    <div className="overflow-x-auto my-4 border border-zinc-200 dark:border-zinc-700 rounded-lg">
+      <table className="min-w-full text-sm">{children}</table>
+    </div>
+  ),
+  thead: ({ children }) => (
+    <thead className="bg-zinc-50 dark:bg-zinc-800">{children}</thead>
+  ),
+  th: ({ children }) => (
+    <th className="px-3 py-2 text-left font-semibold text-zinc-700 dark:text-zinc-300 border-b border-zinc-200 dark:border-zinc-700">
+      {children}
+    </th>
+  ),
+  td: ({ children }) => (
+    <td className="px-3 py-2 border-b border-zinc-100 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400">
+      {children}
+    </td>
+  ),
+  // Horizontal rule
+  hr: () => <hr className="my-6 border-zinc-200 dark:border-zinc-700" />,
+  // Headings
+  h1: ({ children }) => (
+    <h1 className="text-2xl font-bold border-b border-zinc-200 dark:border-zinc-700 pb-2 mt-8 mb-4 first:mt-0">
+      {children}
+    </h1>
+  ),
+  h2: ({ children }) => (
+    <h2 className="text-xl font-semibold mt-8 mb-3 text-zinc-800 dark:text-zinc-200">
+      {children}
+    </h2>
+  ),
+  h3: ({ children }) => (
+    <h3 className="text-lg font-semibold mt-6 mb-2 text-zinc-700 dark:text-zinc-300">
+      {children}
+    </h3>
+  ),
+  // Paragraphs and lists
+  p: ({ children }) => (
+    <p className="leading-7 my-2 text-zinc-700 dark:text-zinc-300">{children}</p>
+  ),
+  ul: ({ children }) => (
+    <ul className="list-disc pl-6 my-2 space-y-1 text-zinc-700 dark:text-zinc-300">{children}</ul>
+  ),
+  ol: ({ children }) => (
+    <ol className="list-decimal pl-6 my-2 space-y-1 text-zinc-700 dark:text-zinc-300">{children}</ol>
+  ),
+  li: ({ children }) => <li className="leading-7">{children}</li>,
+  // Strong and emphasis
+  strong: ({ children }) => (
+    <strong className="font-semibold text-zinc-900 dark:text-zinc-100">{children}</strong>
+  ),
+  // Blockquote
+  blockquote: ({ children }) => (
+    <blockquote className="border-l-4 border-zinc-300 dark:border-zinc-600 pl-4 my-4 text-zinc-600 dark:text-zinc-400 italic">
+      {children}
+    </blockquote>
+  ),
+};
 
 export function MarkdownPreview({ content }: { content: string }) {
   return (
-    <article className="prose prose-zinc dark:prose-invert max-w-none prose-headings:scroll-mt-20 prose-h1:text-2xl prose-h1:font-bold prose-h1:border-b prose-h1:pb-2 prose-h2:text-xl prose-h2:font-semibold prose-h2:mt-8 prose-h2:mb-3 prose-h3:text-lg prose-h3:font-semibold prose-h3:mt-6 prose-h3:mb-2 prose-p:leading-7 prose-li:leading-7 prose-table:text-sm prose-th:bg-zinc-100 dark:prose-th:bg-zinc-800 prose-th:px-3 prose-th:py-2 prose-th:text-left prose-th:font-semibold prose-td:px-3 prose-td:py-2 prose-td:border-t prose-code:bg-zinc-100 dark:prose-code:bg-zinc-800 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:before:content-none prose-code:after:content-none prose-pre:bg-zinc-900 prose-pre:text-zinc-100 prose-hr:my-6 prose-strong:font-semibold">
-      <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
+    <article className="max-w-none">
+      <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
+        {content}
+      </ReactMarkdown>
     </article>
   );
 }
