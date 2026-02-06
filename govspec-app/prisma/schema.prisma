@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Feature {
+  id          String   @id // e.g. "01", "02"
+  name        String
+  status      String   @default("draft") // draft, pending, approved, rejected, completed
+  priority    String?  // critical, high, normal, low
+  dependsOn   String?  // comma-separated Feature IDs
+  requestedBy String
+  requestedAt DateTime
+  approvedAt  DateTime?
+  rejectedAt  DateTime?
+  completedAt DateTime?
+  relatedDocs String?
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  auditLogs     AuditLog[]
+  notifications Notification[]
+}
+
+model AuditLog {
+  id         Int      @id @default(autoincrement())
+  featureId  String
+  fromStatus String?
+  toStatus   String
+  changedBy  String   // "Project Owner" or "AI Project Contributor"
+  reason     String?
+  createdAt  DateTime @default(now())
+
+  feature Feature @relation(fields: [featureId], references: [id])
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  featureId String?
+  type      String   // "new_draft", "pending_review", "dependency_alert", "status_change"
+  title     String
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  feature Feature? @relation(fields: [featureId], references: [id])
+}
+
+model GovSpecMeta {
+  key   String @id
+  value String
+}
