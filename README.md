@@ -24,7 +24,10 @@ GovSpec solves this by introducing a simple but strict governance layer:
 
 Here's an example of GovSpec's governance enforcement. When asked to delete a feature (which violates the rules), the AI stops, cites the specific rule, and follows the Conflict Resolution Protocol:
 
-![GovSpec Governance Enforcement](assets/screenshots/govspec-governance-enforcement.png)
+<p align="center">
+  <img src="assets/screenshots/govspec-governance-enforcement.png" alt="GovSpec Governance Enforcement" width="600" />
+</p>
+<p align="center"><em>GovSpec AI Conflict Resolution — the AI stops, cites the rule, and waits for the Project Owner</em></p>
 
 ## How It Works
 
