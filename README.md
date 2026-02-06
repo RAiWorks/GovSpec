@@ -63,26 +63,105 @@ draft (if reopened)
 | Project Owner | The human developer | Approve, reject, change statuses, modify governance docs |
 | AI Project Contributor | The AI assistant | Analyze, suggest, document, implement (only when approved) |
 
-## GovSpec Web App
+## GovSpec Go Service (Recommended)
 
-GovSpec includes a local web application for managing features through a browser UI instead of editing markdown files manually.
+The primary way to run GovSpec. A single self-contained binary with the web UI embedded — no runtime dependencies, no Node.js, no npm. Runs on Windows, Linux, and macOS. Can be installed as an OS service.
 
 ### Features
-- Dashboard with status summary and feature table
-- One-click approve, reject, pending, complete actions
-- Feature document viewer with rendered markdown preview
-- Audit log tracking every status change
-- In-app notifications for new drafts, pending reviews, and dependency alerts
-- Filesystem sync — markdown files remain the source of truth
-- SQLite database for fast indexing and audit trail
+- Single binary — copy and run, zero dependencies
+- Embedded React SPA with dashboard, feature management, audit log, notifications
+- Versioned REST API (`/api/v1/...`) with health check endpoint
+- CLI with subcommands: `serve`, `install`, `uninstall`, `start`, `stop`, `version`
+- OS service support: Windows Service, systemd (Linux), launchd (macOS)
+- SQLite database (pure Go, no CGO) — cross-compiles to all platforms
+- Configurable via `.env` file or CLI flags
+- Structured logging, graceful shutdown, CORS support
+- Markdown files remain the source of truth
+
+### Quick Start
+
+```bash
+cd govspec-go
+go build -o govspec ./cmd/govspec
+./govspec serve
+```
+
+Open http://127.0.0.1:9741 in your browser.
+
+### CLI Usage
+
+```bash
+# Run in foreground (terminal mode)
+govspec serve
+
+# Run with custom port and docs path
+govspec serve --port 8080 --docs /path/to/docs
+
+# Install as OS service (requires admin/root)
+govspec install
+
+# Start/stop the service
+govspec start
+govspec stop
+
+# Remove the service
+govspec uninstall
+
+# Print version
+govspec version
+```
+
+### Configuration (.env)
+
+```env
+GOVSPEC_PORT=9741
+GOVSPEC_DOCS_PATH=../docs
+GOVSPEC_DB_PATH=./govspec.db
+GOVSPEC_LOG_LEVEL=info
+```
+
+Config precedence: CLI flags > `.env` file > defaults. The app works with zero configuration.
+
+### Building from Source
+
+```bash
+cd govspec-go
+
+# Build frontend + Go binary
+cd web && npm install && npm run build && cd ..
+# Copy built frontend into embed directory
+# Windows:
+xcopy web\dist\* cmd\govspec\web\ /s /e /y
+# Linux/macOS:
+cp -r web/dist/* cmd/govspec/web/
+
+# Build the Go binary
+go build -o govspec ./cmd/govspec
+```
+
+### Cross-Compilation
+
+```bash
+# Linux
+GOOS=linux GOARCH=amd64 go build -o govspec-linux ./cmd/govspec
+
+# macOS (Apple Silicon)
+GOOS=darwin GOARCH=arm64 go build -o govspec-darwin ./cmd/govspec
+
+# Windows
+GOOS=windows GOARCH=amd64 go build -o govspec.exe ./cmd/govspec
+```
 
 ### Tech Stack
-- Next.js (App Router) + TypeScript
-- Tailwind CSS + shadcn/ui
-- Prisma ORM + SQLite
-- react-markdown for document rendering
+- Go (Chi router, pure Go SQLite, Cobra CLI, slog logging)
+- React + TypeScript + Vite + Tailwind CSS v4 + shadcn/ui
+- SQLite via `modernc.org/sqlite` (no CGO)
 
-### Running the App
+## GovSpec Web App (Legacy — Next.js)
+
+The original web application built with Next.js. Still functional but requires Node.js and npm.
+
+### Running the Legacy App
 
 ```bash
 cd govspec-app
@@ -106,7 +185,13 @@ your-project/
 │       ├── _template_minimal_feature.md           # Template for draft features
 │       ├── _template_approved_feature.md          # Template for approved features
 │       └── [NN_feature_name.md]                   # Individual feature documents
-└── govspec-app/                                   # Web management app
+├── govspec-go/                                    # Go service (recommended)
+│   ├── cmd/govspec/                               # CLI entrypoint + embedded web
+│   ├── internal/                                  # Server, handlers, services, repos
+│   ├── web/                                       # React SPA source (Vite)
+│   ├── go.mod
+│   └── .env                                       # Configuration
+└── govspec-app/                                   # Next.js app (legacy)
     ├── prisma/                                    # Database schema and migrations
     └── src/                                       # Next.js application
 ```
@@ -142,19 +227,9 @@ Say `APPROVED` to greenlight a feature. The minimal document gets upgraded to a 
 |--------|---------|
 | `main` | Stable releases only. Protected. |
 | `develop` | Active development. Feature branches merge here. |
-| `feature/NN-feature-name` | Per-feature branches (e.g., `feature/01-govspec-web-app`) |
+| `feature/NN-feature-name` | Per-feature branches (e.g., `feature/03-govspec-go-service`) |
 | `docs/description` | Documentation-only changes |
 | `hotfix/description` | Emergency fixes to main |
-
-### Branch Rules
-
-- `main` is always stable and deployable
-- All development happens on `develop` or feature branches
-- Feature branches are created only when a feature is `approved` in GovSpec
-- Feature branches merge into `develop` via pull request
-- `develop` merges into `main` for releases
-- `docs/` branches can merge directly into `develop` or `main`
-- `hotfix/` branches merge into both `main` and `develop`
 
 ## Current Version
 
@@ -166,7 +241,8 @@ Say `APPROVED` to greenlight a feature. The minimal document gets upgraded to a 
 
 | Feature ID | Feature Name | Status |
 |------------|-------------|--------|
-| 01 | GovSpec Web App | approved |
+| 01 | GovSpec Web App (Next.js) | approved |
+| 03 | GovSpec Go Service | approved |
 
 See `docs/governance/project_features.md` for the full feature registry.
 

@@ -24,6 +24,7 @@ This document is the single source of truth for all features in any GovSpec-gove
 |------------|--------------|--------|----------|------------|--------------|--------------|-------------|-------------|--------------|--------------|-------|
 | 01 | GovSpec Web App | approved | critical | — | Project Owner | 2026-02-06 | 2026-02-06 | — | — | `docs/features/01_govspec_web_app.md` | Core application for managing GovSpec via web UI and API |
 | 02 | Test | pending | normal | — | Project Owner | 2026-02-06 | — | — | — | `docs/features/02_test.md` | Test |
+| 03 | GovSpec Go Service | approved | critical | 01 | AI Project Contributor | 2026-02-06 | 2026-02-06 | — | — | `docs/features/03_govspec_go_service.md` | Go rewrite of GovSpec Web App — single binary, OS service support, cross-platform |
 
 ## Feature ID Rules
 - Feature IDs are numeric and sequential: `01`, `02`, `03`, etc.
