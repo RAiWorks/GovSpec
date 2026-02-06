@@ -239,10 +239,11 @@ Say `APPROVED` to greenlight a feature. The minimal document gets upgraded to a 
 
 ## Roadmap
 
-| Feature ID | Feature Name | Status |
-|------------|-------------|--------|
-| 01 | GovSpec Web App (Next.js) | approved |
-| 03 | GovSpec Go Service | approved |
+| Feature ID | Feature Name | Status | Notes |
+|------------|-------------|--------|-------|
+| 01 | GovSpec Web App (Next.js) | approved | Core web app — legacy, replaced by Feature 03 |
+| 02 | Test | pending | Test feature created via UI to validate governance enforcement |
+| 03 | GovSpec Go Service | approved | Single-binary Go rewrite with embedded SPA |
 
 See `docs/governance/project_features.md` for the full feature registry.
 
