@@ -23,6 +23,7 @@ This document is the single source of truth for all features in any GovSpec-gove
 | Feature ID | Feature Name | Status | Priority | Depends On | Requested By | Requested At | Approved At | Rejected At | Completed At | Related Docs | Notes |
 |------------|--------------|--------|----------|------------|--------------|--------------|-------------|-------------|--------------|--------------|-------|
 | 01 | GovSpec Web App | approved | critical | — | Project Owner | 2026-02-06 | 2026-02-06 | — | — | `docs/features/01_govspec_web_app.md` | Core application for managing GovSpec via web UI and API |
+| 02 | Test | pending | normal | — | Project Owner | 2026-02-06 | — | — | — | `docs/features/02_test.md` | Test |
 
 ## Feature ID Rules
 - Feature IDs are numeric and sequential: `01`, `02`, `03`, etc.

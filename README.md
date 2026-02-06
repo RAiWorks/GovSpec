@@ -18,6 +18,13 @@ GovSpec solves this by introducing a simple but strict governance layer:
 - Every feature must be explicitly approved by the human developer
 - AI assistants can suggest and document, but cannot implement without permission
 - Every status change is recorded for full traceability
+- Governance rules cannot be overridden by chat — the AI follows the protocol
+
+## GovSpec in Action
+
+Here's an example of GovSpec's governance enforcement. When asked to delete a feature (which violates the rules), the AI stops, cites the specific rule, and follows the Conflict Resolution Protocol:
+
+![GovSpec Governance Enforcement](screenshot.png)
 
 ## How It Works
 
@@ -41,10 +48,10 @@ draft (if reopened)
 
 ### Authority Hierarchy
 
-1. **Governance Documents** — the rules of the system (highest authority)
-2. **Feature Registry** — the single source of truth for all features
-3. **Explicit Approval** — the keyword `APPROVED` from the Project Owner
-4. **Chat / Informal Instructions** — lowest authority, cannot override rules
+1. Governance Documents — the rules of the system (highest authority)
+2. Feature Registry — the single source of truth for all features
+3. Explicit Approval — the keyword `APPROVED` from the Project Owner
+4. Chat / Informal Instructions — lowest authority, cannot override rules
 
 ### Roles
 
@@ -52,6 +59,36 @@ draft (if reopened)
 |------|-----|--------|
 | Project Owner | The human developer | Approve, reject, change statuses, modify governance docs |
 | AI Project Contributor | The AI assistant | Analyze, suggest, document, implement (only when approved) |
+
+## GovSpec Web App
+
+GovSpec includes a local web application for managing features through a browser UI instead of editing markdown files manually.
+
+### Features
+- Dashboard with status summary and feature table
+- One-click approve, reject, pending, complete actions
+- Feature document viewer with rendered markdown preview
+- Audit log tracking every status change
+- In-app notifications for new drafts, pending reviews, and dependency alerts
+- Filesystem sync — markdown files remain the source of truth
+- SQLite database for fast indexing and audit trail
+
+### Tech Stack
+- Next.js (App Router) + TypeScript
+- Tailwind CSS + shadcn/ui
+- Prisma ORM + SQLite
+- react-markdown for document rendering
+
+### Running the App
+
+```bash
+cd govspec-app
+npm install
+npx prisma migrate dev
+npm run dev
+```
+
+Open http://localhost:3000 in your browser.
 
 ## Project Structure
 
@@ -66,6 +103,9 @@ your-project/
 │       ├── _template_minimal_feature.md           # Template for draft features
 │       ├── _template_approved_feature.md          # Template for approved features
 │       └── [NN_feature_name.md]                   # Individual feature documents
+└── govspec-app/                                   # Web management app
+    ├── prisma/                                    # Database schema and migrations
+    └── src/                                       # Next.js application
 ```
 
 ## Getting Started
@@ -115,7 +155,7 @@ Say `APPROVED` to greenlight a feature. The minimal document gets upgraded to a 
 
 ## Current Version
 
-- Governance Documents: **v2.0**
+- Governance Documents: v2.0
 - Scope: Solo developer + AI assistant
 - Future: Team, organization, and multi-project support planned
 
@@ -123,13 +163,13 @@ Say `APPROVED` to greenlight a feature. The minimal document gets upgraded to a 
 
 | Feature ID | Feature Name | Status |
 |------------|-------------|--------|
-| 01 | GovSpec Web App | draft |
+| 01 | GovSpec Web App | approved |
 
 See `docs/governance/project_features.md` for the full feature registry.
 
 ## License
 
-[Choose a license]
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
 
 ## Contributing
 
