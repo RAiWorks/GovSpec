@@ -1,0 +1,9 @@
+govspec
+govspec.exe
+govspec.db
+*.db-journal
+*.db-wal
+*.db-shm
+web/dist/
+web/node_modules/
+.env.local
